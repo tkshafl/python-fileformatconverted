@@ -33,11 +33,18 @@ def process_files(src_base_dir, tgt_base_dir,ds):
 
 def create_json_files():
     src_base_dir = os.environ['SRC_ENV_DIR'] 
-    tgt_base_dir = os.environ['TGT_ENV_DIR']    
-    for path in glob.glob(f'{src_base_dir}/*'):
-        if os.path.isdir(path):
-            ds = os.path.split(path)[1]
-            process_files(src_base_dir,tgt_base_dir,ds)      
+    tgt_base_dir = os.environ['TGT_ENV_DIR']
+    datasets = os.environ.get('DATASETS') 
+    if not datasets:   
+        for path in glob.glob(f'{src_base_dir}/*'):
+            if os.path.isdir(path):
+                ds = os.path.split(path)[1]
+                process_files(src_base_dir,tgt_base_dir,ds) 
+    else:
+        dirs = datasets.split(',')
+        for ds in dirs:       
+            process_files(src_base_dir,tgt_base_dir,ds) 
+
 
 if __name__ == '__main__':
     create_json_files()
